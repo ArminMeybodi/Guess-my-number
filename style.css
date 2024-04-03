@@ -115,36 +115,50 @@ h1 {
   display: inline-block;
 }
 
-.dots {
-  background-clip: text;
-  color: transparent;
-}
-
 .label-score {
   margin-bottom: 2rem;
 }
 
 .move-in-right {
   animation: moveInRight 3s infinite;
+  background-clip: text;
+  color: transparent;
 }
 
 @keyframes moveInRight {
-  10% {
+  from {
     background-image: linear-gradient(
       to right,
       #eee,
-      #eee 33.33333333%,
-      transparent 33.33333333%
-    );
-  }
-  20% {
-    background-image: linear-gradient(
-      to right,
-      #eee 66.666666%,
-      transparent 66.666666%
+      #eee 83%,
+      transparent 83%
     );
   }
   30% {
+    background-image: linear-gradient(
+      to right,
+      #eee,
+      #eee 83%,
+      transparent 83%
+    );
+  }
+  50% {
+    background-image: linear-gradient(
+      to right,
+      #eee,
+      #eee 86%,
+      transparent 86%
+    );
+  }
+  70% {
+    background-image: linear-gradient(
+      to right,
+      #eee,
+      #eee 94%,
+      transparent 94%
+    );
+  }
+  to {
     background-image: linear-gradient(to right, #eee, #eee 66.666666%);
   }
 }

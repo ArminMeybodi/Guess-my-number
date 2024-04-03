@@ -1,19 +1,24 @@
-// "use strict";
+"use strict";
 
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
 let score = 10;
 let highscore = 0;
 let guess;
+let end;
 
-const bodyElement = document.querySelector("body");
-const messageElement = document.querySelector(".message");
-const numberElement = document.querySelector(".number");
-const guessElement = document.querySelector(".guess");
-const checkElement = document.querySelector(".check");
-const dotsElement = document.querySelector(".dots");
-const scoreElement = document.querySelector(".score");
-const highscoreElement = document.querySelector(".highscore");
-const againElement = document.querySelector(".again");
+const bodyEl = document.querySelector("body");
+const messageEl = document.querySelector(".message");
+const numberEl = document.querySelector(".number");
+const guessEl = document.querySelector(".guess");
+const checkEl = document.querySelector(".check");
+const scoreEl = document.querySelector(".score");
+const highscoreEl = document.querySelector(".highscore");
+const againEl = document.querySelector(".again");
+
+const playAudio = function (src) {
+  let audio = new Audio(`${src}`);
+  audio.play();
+};
 
 const checkKey = function (e) {
   if (e.key === "Enter" && !score == 0) {
@@ -21,8 +26,10 @@ const checkKey = function (e) {
     check();
   }
 };
+
 const againKey = function (e) {
-  if (e.key === "Enter" && (guess == secretNumber || score == 0)) {
+  if (e.key === "Enter" && end) {
+    end = false;
     document.removeEventListener("keydown", checkKey);
     again();
   }
@@ -30,18 +37,21 @@ const againKey = function (e) {
 document.addEventListener("keydown", checkKey);
 
 const displayMessage = function (message) {
-  messageElement.textContent = message;
+  messageEl.textContent = message;
 };
 const displayscore = function (score) {
-  scoreElement.textContent = score;
+  scoreEl.textContent = score;
 };
+
 document.addEventListener("DOMContentLoaded", function () {
-  guessElement.focus();
+  guessEl.focus();
 });
 
 const check = function () {
-  guess = Number(guessElement.value);
-  dotsElement.classList.remove("move-in-right");
+  guess = Number(guessEl.value);
+  messageEl.classList.remove("move-in-right");
+
+  playAudio("sounds/check.mp3");
 
   // When there is no input
   if (!guess) {
@@ -53,21 +63,26 @@ const check = function () {
     // When player wins
     if (guess === secretNumber) {
       displayMessage("🎉 Correct Number!");
-      numberElement.textContent = secretNumber;
+      numberEl.textContent = secretNumber;
+      end = true;
 
-      bodyElement.style.backgroundColor = "#60b347";
-      numberElement.style.width = "30rem";
+      bodyEl.style.backgroundColor = "#60b347";
+      numberEl.style.width = "30rem";
 
-      checkElement.classList.remove("pulsate");
-      againElement.classList.add("pulsate");
+      checkEl.classList.toggle("pulsate");
+      againEl.classList.toggle("pulsate");
 
       document.removeEventListener("keydown", checkKey);
       document.addEventListener("keydown", againKey);
-      checkElement.removeEventListener("click", check);
+      checkEl.removeEventListener("click", check);
 
       if (score > highscore) {
         highscore = score;
-        highscoreElement.textContent = highscore;
+        highscoreEl.textContent = highscore;
+
+        playAudio("sounds/score-up.mp3");
+      } else {
+        playAudio("sounds/win.mp3");
       }
     }
 
@@ -89,43 +104,47 @@ const check = function () {
         displayMessage("💥 You lost the game!");
         score = 0;
         displayscore(score);
+        end = true;
+
+        playAudio("sounds/lose.mp3");
 
         document.removeEventListener("keydown", checkKey);
         document.addEventListener("keydown", againKey);
 
-        bodyElement.style.backgroundColor = "#bf0026";
-        checkElement.classList.remove("pulsate");
-        againElement.classList.add("pulsate");
+        bodyEl.style.backgroundColor = "#bf0026";
+
+        checkEl.classList.toggle("pulsate");
+        againEl.classList.toggle("pulsate");
       }
     }
   }
-
   //when guess is in wrong range
   else {
-    messageElement.textContent = "Number should be between 1 and 20!";
+    messageEl.textContent = "Number should be between 1 and 20!";
   }
 };
-checkElement.addEventListener("click", check);
+checkEl.addEventListener("click", check);
 
 //play again (reset) button
 const again = function () {
   score = 10;
   secretNumber = Math.trunc(Math.random() * 20) + 1;
-  displayMessage("Start guessing");
+  displayMessage("Start guessing...");
+  playAudio("sounds/try-again.mp3");
 
-  dotsElement.classList.add("move-in-right");
-  againElement.classList.remove("pulsate");
-  checkElement.classList.add("pulsate");
+  messageEl.classList.add("move-in-right");
+  againEl.classList.remove("pulsate");
+  checkEl.classList.add("pulsate");
 
   displayscore(score);
-  numberElement.textContent = "?";
-  guessElement.value = "";
-  guessElement.focus();
+  numberEl.textContent = "?";
+  guessEl.value = "";
+  guessEl.focus();
 
-  bodyElement.style.backgroundColor = "#222";
-  numberElement.style.width = "15rem";
+  bodyEl.style.backgroundColor = "#222";
+  numberEl.style.width = "15rem";
 
   document.addEventListener("keydown", checkKey);
-  checkElement.addEventListener("click", check);
+  checkEl.addEventListener("click", check);
 };
-againElement.addEventListener("click", again);
+againEl.addEventListener("click", again);
