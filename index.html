@@ -11,10 +11,63 @@
     <header>
       <h1>Guess My Number!</h1>
       <p class="between">(Between 1 and 20)</p>
+      <button class="show-modal">
+        <img class="icon" src="icons/info-circle.svg" alt="information icon" />
+      </button>
       <button class="btn again">Again!</button>
       <div class="number">?</div>
     </header>
     <main>
+      <div class="info-modal hidden">
+        <button class="close-info-modal">&times;</button>
+        <h3 class="info-modal-title">RULES OF THE GAME</h3>
+        <ul class="info-modal-box">
+          <li class="info-modal-text">
+            Guess a number between 1 to 20 then click on check button or press
+            Enter key on your keyboard to finally reach the secret number.
+          </li>
+          <li class="info-modal-text">
+            Each time you guess wrongly, you will lose 1 score from your default
+            scores(10).
+          </li>
+          <li class="info-modal-text">
+            If the diffrence between your guess and secret number is equal or
+            lower than 3, game will show you "😃 You are close!" message.
+          </li>
+          <li class="info-modal-text">
+            If the diffrence between your guess and secret number is higher than
+            3, game will show you "📈 Too high!" message.
+          </li>
+          <li class="info-modal-text">
+            If the diffrence between your guess and secret number is lower than
+            3 , game will show you "📉 Too low!" message.
+          </li>
+          <li class="info-modal-text">
+            If you can guess the secret number before you lose all of your
+            scores, you will <b>win</b> the game, otherwise you will
+            <b>lose</b> the game.
+          </li>
+          <li class="info-modal-text">
+            If you lose all of your scores, you will lose the game.
+          </li>
+          <li class="info-modal-text">
+            Click on Again button whenever you lose, win or want to restart the
+            game.
+          </li>
+          <li class="info-modal-text">
+            You can reastart the game whenever you lose or win by pressing Enter
+            key.
+          </li>
+          <li class="info-modal-text">
+            The high score box will show your highest score that you have
+            reached in rounds you have played.
+          </li>
+          <li class="info-modal-text">
+            Note: the high score will not be reset by using Again button and you
+            should refresh the page in purpose of restarting this part.
+          </li>
+        </ul>
+      </div>
       <section class="left">
         <input type="number" class="guess" />
         <button class="btn check pulsate">Check!</button>
@@ -27,6 +80,7 @@
         </p>
       </section>
     </main>
+    <div class="overlay hidden"></div>
     <script src="script.js"></script>
   </body>
 </html>

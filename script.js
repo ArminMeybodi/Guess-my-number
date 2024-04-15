@@ -10,10 +10,31 @@ const bodyEl = document.querySelector("body");
 const messageEl = document.querySelector(".message");
 const numberEl = document.querySelector(".number");
 const guessEl = document.querySelector(".guess");
-const checkEl = document.querySelector(".check");
+const btnCheck = document.querySelector(".check");
 const scoreEl = document.querySelector(".score");
 const highscoreEl = document.querySelector(".highscore");
-const againEl = document.querySelector(".again");
+const btnAgain = document.querySelector(".again");
+const btnShowModal = document.querySelector(".show-modal");
+const modal = document.querySelector(".info-modal");
+const overlay = document.querySelector(".overlay");
+const btnCloseModal = document.querySelector(".close-info-modal");
+const btnOpenModal = document.querySelectorAll(".icon");
+
+const openModal = function () {
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
+
+const closeModal = function () {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+for (let i = 0; i < btnOpenModal.length; i++)
+  btnOpenModal[i].addEventListener("click", openModal);
+
+btnCloseModal.addEventListener("click", closeModal);
+overlay.addEventListener("click", closeModal);
 
 const playAudio = function (src) {
   let audio = new Audio(`${src}`);
@@ -53,13 +74,9 @@ const check = function () {
 
   playAudio("sounds/check.mp3");
 
-  // When there is no input
-  if (!guess) {
-    displayMessage("⛔️ No number!");
-  }
-
   //when guess is in right range
   if (guess >= 1 && guess <= 20) {
+    btnShowModal.classList.remove("going-up");
     // When player wins
     if (guess === secretNumber) {
       displayMessage("🎉 Correct Number!");
@@ -69,12 +86,12 @@ const check = function () {
       bodyEl.style.backgroundColor = "#60b347";
       numberEl.style.width = "30rem";
 
-      checkEl.classList.toggle("pulsate");
-      againEl.classList.toggle("pulsate");
+      btnCheck.classList.toggle("pulsate");
+      btnAgain.classList.toggle("pulsate");
 
       document.removeEventListener("keydown", checkKey);
       document.addEventListener("keydown", againKey);
-      checkEl.removeEventListener("click", check);
+      btnCheck.removeEventListener("click", check);
 
       if (score > highscore) {
         highscore = score;
@@ -113,17 +130,24 @@ const check = function () {
 
         bodyEl.style.backgroundColor = "#bf0026";
 
-        checkEl.classList.toggle("pulsate");
-        againEl.classList.toggle("pulsate");
+        btnCheck.classList.toggle("pulsate");
+        btnAgain.classList.toggle("pulsate");
+        btnShowModal.classList.remove("going-up");
       }
     }
+  }
+  //  When there is no input
+  else if (guessEl.value == "") {
+    messageEl.textContent = "No number!";
   }
   //when guess is in wrong range
   else {
     messageEl.textContent = "Number should be between 1 and 20!";
+    btnShowModal.classList.add("going-up");
   }
 };
-checkEl.addEventListener("click", check);
+
+btnCheck.addEventListener("click", check);
 
 //play again (reset) button
 const again = function () {
@@ -133,8 +157,8 @@ const again = function () {
   playAudio("sounds/try-again.mp3");
 
   messageEl.classList.add("move-in-right");
-  againEl.classList.remove("pulsate");
-  checkEl.classList.add("pulsate");
+  btnAgain.classList.remove("pulsate");
+  btnCheck.classList.add("pulsate");
 
   displayscore(score);
   numberEl.textContent = "?";
@@ -145,6 +169,7 @@ const again = function () {
   numberEl.style.width = "15rem";
 
   document.addEventListener("keydown", checkKey);
-  checkEl.addEventListener("click", check);
+  btnCheck.addEventListener("click", check);
 };
-againEl.addEventListener("click", again);
+
+btnAgain.addEventListener("click", again);
